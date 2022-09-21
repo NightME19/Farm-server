@@ -14,8 +14,18 @@ app.use(express.json())
 // parse requests of content-type -> application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }))
 
-app.get("/", (req, res) => {
-  res.json({message: "Hell!"})
+app.use(function (req, res, next) {
+  res.header(
+    "Access-Control-Allow-Headers",
+    "x-access-token, Origin, Content-Type, Accept"
+  )
+  next()
+})
+
+require("./app/routes")(app)
+
+app.get("/", () => {
+  res.send({message: "hello"})
 })
 
 function initial(){
