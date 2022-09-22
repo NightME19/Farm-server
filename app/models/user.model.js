@@ -11,12 +11,5 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING
     },
   })
-
-  User.associate = models => {
-    User.hasMany(models.Plant, {
-      ondDelete: "cascade"
-    })
-  }
-
   return User
 }

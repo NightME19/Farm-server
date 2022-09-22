@@ -27,6 +27,11 @@ db.sequelize = sequelize
 db.user = require("./user.model")(sequelize, Sequelize)
 db.plant = require("./plant.model")(sequelize, Sequelize)
 
-
+db.user.hasMany(db.plant, {
+  ondDelete: "cascade"
+})
+db.plant.belongsTo(db.user, {
+  onDelete: "cascade"
+})
 
 module.exports = db

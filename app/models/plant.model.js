@@ -4,15 +4,5 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING
     }
   })
-
-  Plant.associate = models => {
-    Plant.belongsTo(models.User, {
-      foreignKey: {
-        allowNull: false
-      },
-      onDelete: "cascade"
-    })
-  }
-
   return Plant
 }
