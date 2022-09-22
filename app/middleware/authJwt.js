@@ -12,8 +12,9 @@ verifyToken = async (req, res, next) => {
     })
   }
 
-  let (err, decoded) = await jwt.verify(token, config.secret)
-  if(err) {
+  try {
+    let decoded = jwt.verify(token, config.secret)
+  } catch (error) {
     return res.status(401).send({
       message: "Unauthorized!"
     })

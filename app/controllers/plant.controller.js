@@ -22,7 +22,7 @@ exports.findAll = async (req, res) => {
     })
   }
   try {
-    const plants = await Plant.findAll({where: {userId: req.userId}})
+    const plants = await Plant.findAll({where: {userId: req.body.userId}})
     res.send(plants)
   } catch (error) {
     res.status(500).send({message: error.message || "Some error occurred while creating the plant."})

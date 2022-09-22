@@ -4,11 +4,11 @@ const db = require("./app/models")
 
 const app = express()
 var corsOption = {
-  origin: "http://localhost:8080"
+  origin: "http://localhost:8081"
 }
 
-app.use(cors(corsOption))
-
+// app.use(cors(corsOption))
+app.use(cors())
 // parse requests of content-type -> application/json
 app.use(express.json())
 // parse requests of content-type -> application/x-www-form-urlencoded
@@ -24,26 +24,31 @@ app.use(function (req, res, next) {
 
 require("./app/routes")(app)
 
-app.get("/", () => {
+app.get("/", (req, res) => {
   res.send({message: "hello"})
 })
 
-function initial(){
-  User = db.user
-
-  User.create({
+const bcrypt = require("bcryptjs")
+const { user } = require("./app/models")
+async function initial(){
+  const User = db.user
+  const user = await User.create({
     fullname: "test name",
-    username: "testUsername",
-    password: "testPassword"
+    username: "test",
+    password: bcrypt.hashSync("test", 2)
+  })
+  db.plant.create({
+    name: "Plant 1",
+    userId: user.id
   })
 }
 
 const PORT = process.env.PORT || 8080
 
-db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync({ force: true }).then(async () => {
   console.log('Drop and resync DB');
-  initial()
-  app.listen((PORT, () => {
-    console.log(`Server is runnig on port ${PORT}.`);
-  }))
+  await initial()
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}.`);
+  })
 })
